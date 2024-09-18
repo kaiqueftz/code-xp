@@ -7,12 +7,10 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
   <title>XepaSocial</title>
 </head>
-<!--ComentáriosKaique-->
 
-<body style="min-width: 372px;"> <!--Menor tamanho de tela para celulares-->
+<body style="min-width: 372px;">
   <nav class="navbar navbar-expand-lg navbar-dark bg-success border-bottom shadow-sm mb-3">
-    <!--navbar-expand-lg serve para aparecer as linhas ao ir diminuindo a tela-->
-    <div class="container"><!--Usada para delimitar algo-->
+    <div class="container">
       <a class="navbar-brand" href=""><strong>Xepa Social</strong></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse">
         <span class="navbar-toggler-icon"></span>
@@ -88,6 +86,20 @@
 
     <main>
         <div class="container mt-5">
+          <h2 class="text-center mb-4">Adicionar Novo Produto</h2>
+
+          <form id="produtoForm" class="mb-5">
+            <div class="mb-3">
+              <label for="nome" class="form-label">Nome do Produto</label>
+              <input type="text" class="form-control" id="nome" required>
+            </div>
+            <div class="mb-3">
+              <label for="descricao" class="form-label">Descrição do Produto</label>
+              <input type="text" class="form-control" id="descricao" required>
+            </div>
+            <button type="submit" class="btn btn-success">Adicionar Produto</button>
+          </form>
+
           <div class="row">
             <div class="col-12">
               <h2 class="text-center mb-4">Nossos Produtos</h2>
@@ -154,13 +166,37 @@
 
   </footer>
 
+  <script>
+    document.getElementById('produtoForm').addEventListener('submit', async function (event) {
+      event.preventDefault();
+      
+      const nome = document.getElementById('nome').value;
+      const descricao = document.getElementById('descricao').value;
+
+      try {
+        const response = await fetch('http://localhost:3000/produtos', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ nome, descricao }),
+        });
+
+        if (response.ok) {
+          alert('Produto adicionado com sucesso!');
+        } else {
+          alert('Erro ao adicionar o produto.');
+        }
+      } catch (error) {
+        console.error('Erro:', error);
+        alert('Erro ao se conectar ao servidor.');
+      }
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
 </body>
 
 </html>
-
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
-  integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-  integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"
-  integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>

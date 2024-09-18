@@ -7,4 +7,3 @@ router.get('/', produtosController.getProdutos);
 router.post('/', produtosController.addProduto);
 
 module.exports = router;
-

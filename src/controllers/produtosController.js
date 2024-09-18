@@ -1,22 +1,39 @@
-const db = require('../config/database');
+const supabase = require('../supabaseClient');
 
 // Obter todos os produtos
-exports.getProdutos = (req, res) => {
-  db.query('SELECT * FROM produtos', (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
+exports.getProdutos = async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('produtos')
+      .select('*');
+
+    if (error) {
+      throw error;
     }
-    res.json(results);
-  });
+
+    res.json(data);
+  } catch (error) {
+    console.error('Erro ao listar produtos:', error.message);
+    res.status(500).send('Erro ao listar produtos');
+  }
 };
 
 // Adicionar um novo produto
-exports.addProduto = (req, res) => {
+exports.addProduto = async (req, res) => {
   const { nome, descricao } = req.body;
-  db.query('INSERT INTO produtos (nome, descricao) VALUES (?, ?)', [nome, descricao], (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
+
+  try {
+    const { data, error } = await supabase
+      .from('produtos')
+      .insert([{ nome, descricao }]);
+
+    if (error) {
+      throw error;
     }
-    res.status(201).json({ id: results.insertId });
-  });
+
+    res.status(201).json(data[0]);
+  } catch (error) {
+    console.error('Erro ao adicionar produto:', error.message);
+    res.status(500).send('Erro ao adicionar produto');
+  }
 };
